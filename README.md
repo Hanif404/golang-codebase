@@ -7,6 +7,8 @@ A Go web application built with Fiber framework and MySQL database.
 - REST API with Fiber framework
 - MySQL database integration
 - Clean architecture (domain, service, repository pattern)
+- User management with CRUD operations
+- Request validation
 - Environment configuration
 
 ## Setup
@@ -18,8 +20,11 @@ go mod tidy
 
 2. Configure environment:
 ```bash
-cp .env.example .env
-# Edit .env with your database credentials
+# Create .env file with database credentials
+DB_USER=your_username
+DB_PASS=your_password
+DB_HOST=localhost:3306
+DB_NAME=your_database
 ```
 
 3. Run the application:
@@ -28,6 +33,35 @@ go run src/cmd/app/main.go
 ```
 
 The server will start on `http://localhost:3000`
+
+## API Endpoints
+
+### Users
+- `GET /api/v1/users` - Get all users
+- `GET /api/v1/user/:id` - Get user by ID
+- `POST /api/v1/user` - Create new user
+- `PUT /api/v1/user/:id` - Update user
+- `DELETE /api/v1/user/:id` - Delete user
+
+### User Schema
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
+
+### Validation Rules
+- `name`: Required, minimum 3 characters
+- `email`: Required, valid email format
+- `password`: Required
+
+### Response Format
+- Success: Returns user object or array
+- Error: `{"error": "error message"}`
+- Validation Error: `{"validation_errors": {"field": "rule"}}`
 
 ## Project Structure
 
