@@ -8,10 +8,12 @@ import (
 	mysql "golang-codebase/src/pkg/database"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 )
 
 func main() {
 	app := fiber.New()
+	app.Use(healthcheck.New())
 	db := mysql.GetDatabase()
 
 	userRepo := userrepository.New(db)
