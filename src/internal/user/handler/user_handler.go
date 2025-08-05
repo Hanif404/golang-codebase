@@ -2,6 +2,7 @@ package userhandler
 
 import (
 	"golang-codebase/src/domain/user"
+	"golang-codebase/src/utils"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -45,6 +46,14 @@ func (h *Handler) PostUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 	}
+
+	errValid := utils.ValidateStruct(user)
+	if errValid != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"validation_errors": errValid,
+		})
+	}
+
 	err := h.service.PostUser(user)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
