@@ -8,6 +8,7 @@ A Go web application built with Fiber framework and MySQL database.
 - MySQL database integration
 - Clean architecture (domain, service, repository pattern)
 - User management with CRUD operations
+- JWT authentication
 - Request validation
 - Environment configuration
 
@@ -36,12 +37,32 @@ The server will start on `http://localhost:3000`
 
 ## API Endpoints
 
-### Users
+### Authentication
+- `POST /api/v1/login` - User login
+- `POST /api/v1/registration` - User registration
+
+### Users (Protected - Requires JWT Token)
 - `GET /api/v1/users` - Get all users
 - `GET /api/v1/user/:id` - Get user by ID
 - `POST /api/v1/user` - Create new user
 - `PUT /api/v1/user/:id` - Update user
 - `DELETE /api/v1/user/:id` - Delete user
+
+### Authentication Schema
+```json
+// Login
+{
+  "email": "john@example.com",
+  "password": "password123"
+}
+
+// Registration
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "password123"
+}
+```
 
 ### User Schema
 ```json
@@ -57,6 +78,12 @@ The server will start on `http://localhost:3000`
 - `name`: Required, minimum 3 characters
 - `email`: Required, valid email format
 - `password`: Required
+
+### Authentication
+For protected endpoints, include JWT token in Authorization header:
+```
+Authorization: Bearer <your_jwt_token>
+```
 
 ### Response Format
 - Success: Returns user object or array
