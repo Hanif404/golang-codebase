@@ -1,9 +1,13 @@
 package main
 
 import (
+	authhandler "golang-codebase/src/internal/auth/handler"
+	authrepository "golang-codebase/src/internal/auth/repository"
+	authRouter "golang-codebase/src/internal/auth/router"
+	authservice "golang-codebase/src/internal/auth/service"
 	userhandler "golang-codebase/src/internal/user/handler"
 	userrepository "golang-codebase/src/internal/user/repository"
-	"golang-codebase/src/internal/user/router"
+	userRouter "golang-codebase/src/internal/user/router"
 	userservice "golang-codebase/src/internal/user/service"
 	mysql "golang-codebase/src/pkg/database"
 
@@ -19,8 +23,12 @@ func main() {
 	userRepo := userrepository.New(db)
 	userService := userservice.New(userRepo)
 	userHandler := userhandler.New(userService)
+	userRouter.Routes(app, userHandler)
 
-	router.UserRoutes(app, userHandler)
+	authRepo := authrepository.New(db)
+	authService := authservice.New(authRepo)
+	authHandler := authhandler.New(authService)
+	authRouter.Routes(app, authHandler)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
